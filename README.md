@@ -156,11 +156,11 @@ mkdir weights && cd weights
 
 # Pascal-Part-116
 # PartCLIPSeg + Zero-shot (partclipseg_voc_oracle.pth (829M))
-gdown https://drive.google.com/uc?id=1Qf9oLofq8ENBzDaSznP7EBODKkE_Ph2A
+gdown https://drive.google.com/uc?id=1ytZpfutk__67GLwB-4jMClehJlnAzYFS
 
 # ADE20K-Part-234
 # PartCLIPSeg + Zero-shot (partclipseg_voc_oracle.pth (829M))
-gdown https://drive.google.com/uc?id=1XqgHI4CRcfLIz2j8_ZbIvoF_GFjMqCqn
+gdown https://drive.google.com/uc?id=10UTxrlamYq2rq3Uuv1GdOxpLy8f-QXoz
 
 ```
 
