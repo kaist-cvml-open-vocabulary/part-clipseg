@@ -72,21 +72,27 @@ python -c "import mmcv; print(mmcv.__version__)"  # 1.7.1
 ### Prepare Datasets
 
 ```sh
-mkdir datasets && cd datasets
+cd datasets
+```
 
 # PascalPart116
+```sh
 gdown https://drive.google.com/uc?id=1QF0BglrcC0teKqx15vP8qJNakGgCWaEH # Backup
 tar -xzf PascalPart116.tar.gz
 find datasets/PascalPart116/images/val/ -name '._*' -delete
 find datasets/PascalPart116/ -name '._*' -delete
+```
 
 # ADE20KPart234
+```sh
 gdown https://drive.google.com/uc?id=1EBVPW_tqzBOQ_DC6yLcouyxR7WrctRKi
 tar -xzf ADE20KPart234.tar.gz
+```
 
 # PartImageNet
-# TBA
-```
+- Download `LOC_synset_mapping.txt` file from [here](https://www.kaggle.com/c/imagenet-object-localization-challenge/data). Make sure `LOC_synset_mapping.txt` is in the `datasets` folder.
+- Download `PartImageNet_Seg` from [PartImageNet](https://github.com/TACJu/PartImageNet) and extract it to the `datasets` folder.
+
 
 ### Preprocess Datasets
 
@@ -108,8 +114,9 @@ python baselines/data/datasets/mask_cls_collect.py \
 # (no preprocessing required)
 
 # PartImageNet
-# TBA
-
+cd datasets
+python partimagenet_preprocess.py --data_dir PartImageNet
+# Make sure to have LOC_synset_mapping.txt in the datasets folder mentioned above.
 ```
 
 ### Pre-trained Weights
@@ -128,13 +135,15 @@ python baselines/data/datasets/mask_cls_collect.py \
     <td align="center">PartCLIPSeg</td>
     <td align="center">zero-shot</td>
     <td align="center">Pascal-Part-116</td>
-    <td align="center"><a href="https://drive.google.com/file/d/1Qf9oLofq8ENBzDaSznP7EBODKkE_Ph2A/view?usp=drive_link">model</a>&nbsp;</td>
+    <!-- <td align="center"><a href="https://drive.google.com/file/d/1Qf9oLofq8ENBzDaSznP7EBODKkE_Ph2A/view?usp=drive_link">model</a>&nbsp;</td> -->
+    <td align="center"><a href="https://drive.google.com/file/d/1ytZpfutk__67GLwB-4jMClehJlnAzYFS/view?usp=share_link">model</a>&nbsp;</td>
 </tr>
 <tr>
     <td align="center">PartCLIPSeg</td>
     <td align="center">zero-shot</td>
     <td align="center">ADE20K-Part-234</td>
-    <td align="center"><a href="https://drive.google.com/file/d/1XqgHI4CRcfLIz2j8_ZbIvoF_GFjMqCqn/view?usp=drive_link">model</a>&nbsp;</td>
+    <!-- <td align="center"><a href="https://drive.google.com/file/d/1XqgHI4CRcfLIz2j8_ZbIvoF_GFjMqCqn/view?usp=drive_link">model</a>&nbsp;</td> -->
+    <td align="center"><a href="https://drive.google.com/file/d/10UTxrlamYq2rq3Uuv1GdOxpLy8f-QXoz/view?usp=share_link">model</a>&nbsp;</td>
 </tr>
 
 </tbody></table>

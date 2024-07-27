@@ -165,7 +165,7 @@ cython_debug/
 # Database
 # !datasets/
 datasets/*
-# !datasets/partimagenet_preprocess.py
+!datasets/partimagenet_preprocess.py
 
 # output
 output/*
