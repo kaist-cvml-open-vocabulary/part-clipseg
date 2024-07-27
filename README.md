@@ -75,7 +75,7 @@ python -c "import mmcv; print(mmcv.__version__)"  # 1.7.1
 cd datasets
 ```
 
-# PascalPart116
+#### PascalPart116
 ```sh
 gdown https://drive.google.com/uc?id=1QF0BglrcC0teKqx15vP8qJNakGgCWaEH # Backup
 tar -xzf PascalPart116.tar.gz
@@ -83,13 +83,13 @@ find datasets/PascalPart116/images/val/ -name '._*' -delete
 find datasets/PascalPart116/ -name '._*' -delete
 ```
 
-# ADE20KPart234
+#### ADE20KPart234
 ```sh
 gdown https://drive.google.com/uc?id=1EBVPW_tqzBOQ_DC6yLcouyxR7WrctRKi
 tar -xzf ADE20KPart234.tar.gz
 ```
 
-# PartImageNet
+#### PartImageNet
 - Download `LOC_synset_mapping.txt` file from [here](https://www.kaggle.com/c/imagenet-object-localization-challenge/data). Make sure `LOC_synset_mapping.txt` is in the `datasets` folder.
 - Download `PartImageNet_Seg` from [PartImageNet](https://github.com/TACJu/PartImageNet) and extract it to the `datasets` folder.
 
