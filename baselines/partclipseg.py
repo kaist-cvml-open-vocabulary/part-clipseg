@@ -17,12 +17,16 @@ from collections import defaultdict
 @META_ARCH_REGISTRY.register()
 class PartCLIPSeg(nn.Module):
     @configurable
-    def __init__(self, train_dataset, test_dataset, ORACLE, use_attention, *kwargs):
+    def __init__(self, train_dataset, test_dataset, ORACLE, 
+                 use_attention, obj_lambda, part_lambda, 
+                 attn_mask_threshold, attn_sep_lambda, attn_enh_lambda, *kwargs):
         super().__init__()
 
         self.device = "cuda"
         self.oracle = ORACLE
         self.use_attention = use_attention
+        self.obj_lambda = obj_lambda
+        self.part_lambda = part_lambda
         # self.segmentation_background_threshold = 0.0
 
         self.ignore_label = MetadataCatalog.get(test_dataset).ignore_label
@@ -65,9 +69,11 @@ class PartCLIPSeg(nn.Module):
 
         if self.use_attention:
             self.attn_level = kwargs["attn_level"] if "attn_level" in kwargs else [2]
-            self.attn_mask_threshold = kwargs["attn_mask_threshold"] if "attn_mask_threshold" in kwargs else 0.3
-            self.lambda_attn_sep = kwargs["lambda_attn_sep"] if "lambda_attn_sep" in kwargs else 0.1
-            self.lambda_attn_enh = kwargs["lambda_attn_enh"] if "lambda_attn_enh" in kwargs else 0.01
+            self.attn_mask_threshold = attn_mask_threshold
+            self.attn_sep_lambda = attn_sep_lambda
+            self.attn_enh_lambda = attn_enh_lambda
+            # self.lambda_attn_sep = kwargs["lambda_attn_sep"] if "lambda_attn_sep" in kwargs else 0.1
+            # self.lambda_attn_enh = kwargs["lambda_attn_enh"] if "lambda_attn_enh" in kwargs else 0.01
 
     @classmethod
     def from_config(cls, cfg):
@@ -76,7 +82,12 @@ class PartCLIPSeg(nn.Module):
         ret["train_dataset"] = cfg.DATASETS.TRAIN[0]
         ret['test_dataset'] = cfg.DATASETS.TEST[0]
         ret["ORACLE"] = cfg.ORACLE
+        ret["obj_lambda"] = cfg.MODEL.PARTCLIPSEG.OBJ_LAMBDA if hasattr(cfg.MODEL, "PARTCLIPSEG") else 1.0
+        ret["part_lambda"] = cfg.MODEL.PARTCLIPSEG.PART_LAMBDA if hasattr(cfg.MODEL, "PARTCLIPSEG") else 1.0
         ret["use_attention"] = cfg.MODEL.PARTCLIPSEG.USE_ATTENTION if hasattr(cfg.MODEL, "PARTCLIPSEG") else False
+        ret["attn_mask_threshold"] = cfg.MODEL.PARTCLIPSEG.ATTN_MASK_THRESHOLD if hasattr(cfg.MODEL, "PARTCLIPSEG") else 0.3
+        ret["attn_sep_lambda"] = cfg.MODEL.PARTCLIPSEG.ATTN_SEP_LAMBDA if hasattr(cfg.MODEL, "PARTCLIPSEG") else 0.1
+        ret["attn_enh_lambda"] = cfg.MODEL.PARTCLIPSEG.ATTN_ENH_LAMBDA if hasattr(cfg.MODEL, "PARTCLIPSEG") else 0.01
         return ret
 
     def init_train_metadata(self, train_dataset):
@@ -525,7 +536,7 @@ class PartCLIPSeg(nn.Module):
             weight=class_weight[num_part_classes:],
         )
 
-        loss = part_obj_loss + obj_loss + part_loss
+        loss = part_obj_loss + self.obj_lambda * obj_loss + self.part_lambda * part_loss
 
 
         # ---------------------------------------------------------------------
@@ -546,7 +557,7 @@ class PartCLIPSeg(nn.Module):
             )
 
             attn_loss = (
-                self.lambda_attn_sep * loss_sep + self.lambda_attn_enh * loss_enh
+                self.attn_sep_lambda * loss_sep + self.attn_enh_lambda * loss_enh
             )
 
             # TODO: attention loss
